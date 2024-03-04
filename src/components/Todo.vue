@@ -1,9 +1,3 @@
-<script setup>
-import TodoItem from "./TodoItem.vue";
-
-
-</script>
-
 <template>
   <div>
     <div class="todo d-flex align-items-center">
@@ -32,15 +26,15 @@ import TodoItem from "./TodoItem.vue";
                   data-bs-parent="#accordionExample"
                 >
                   <div class="accordion-body">
-                    <input class="form-control" type="text" />
-                    <button type="button" class="btn btn-primary mt-2">
+                    <input class="form-control" type="text" v-model="newTask" />
+                    <button type="button" class="btn btn-primary mt-2" @click="addTask">
                       Add Task
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-            <TodoItem />
+            <TodoItem v-for="(task, index) in tasks" :key="index" :task="task" />
           </div>
           <div class="col-md-3"></div>
         </div>
@@ -48,6 +42,26 @@ import TodoItem from "./TodoItem.vue";
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import TodoItem from "./TodoItem.vue";
+
+const tasks = ref([
+  "Task 1",
+  "Task 2",
+  "Task 3",
+  "Task 4"
+]);
+const newTask = ref('');
+
+const addTask = () => {
+  if (newTask.value.trim() !== '') {
+    tasks.value.push(newTask.value);
+    newTask.value = '';
+  }
+}
+</script>
 
 <style>
 .todo {
