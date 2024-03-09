@@ -1,3 +1,23 @@
+<script setup>
+import { ref } from "vue";
+import TodoItem from "./TodoItem.vue";
+
+const tasks = ref(["Task 1", "Task 2", "Task 3", "Task 4"]);
+const newTask = ref("");
+
+const addTask = () => {
+  if (newTask.value.trim() !== "") {
+    tasks.value.push(newTask.value);
+    newTask.value = "";
+  }
+};
+
+const deleteTask = (index) => {
+  // Remove the task at the given index from the tasks array
+  tasks.value.splice(index, 1);
+};
+</script>
+
 <template>
   <div>
     <div class="todo d-flex align-items-center">
@@ -27,14 +47,27 @@
                 >
                   <div class="accordion-body">
                     <input class="form-control" type="text" v-model="newTask" />
-                    <button type="button" class="btn btn-primary mt-2" @click="addTask">
+                    <button
+                      type="button"
+                      class="btn btn-primary mt-2"
+                      @click="addTask"
+                    >
                       Add Task
                     </button>
                   </div>
                 </div>
               </div>
             </div>
-            <TodoItem v-for="(task, index) in tasks" :key="index" :task="task" />
+
+            <!-- item -->
+            <TodoItem
+              v-for="(task, index) in tasks"
+              :key="index"
+              :task="task"
+              taskName="Task Name"
+              :index="index"
+              @delete-task="deleteTask"
+            />
           </div>
           <div class="col-md-3"></div>
         </div>
@@ -42,26 +75,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import TodoItem from "./TodoItem.vue";
-
-const tasks = ref([
-  "Task 1",
-  "Task 2",
-  "Task 3",
-  "Task 4"
-]);
-const newTask = ref('');
-
-const addTask = () => {
-  if (newTask.value.trim() !== '') {
-    tasks.value.push(newTask.value);
-    newTask.value = '';
-  }
-}
-</script>
 
 <style>
 .todo {
