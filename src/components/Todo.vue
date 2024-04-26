@@ -10,10 +10,11 @@ const addTask = () => {
     tasks.value.push(newTask.value);
     newTask.value = "";
   }
+  
 };
 
 const deleteTask = (index) => {
-  // Remove the task at the given index from the tasks array
+  // Implement delete logic here
   tasks.value.splice(index, 1);
 };
 </script>
@@ -58,13 +59,12 @@ const deleteTask = (index) => {
                 </div>
               </div>
             </div>
-
+            <h3 class="my-3">Task Name</h3>
             <!-- item -->
             <TodoItem
               v-for="(task, index) in tasks"
               :key="index"
               :task="task"
-              taskName="Task Name"
               :index="index"
               @delete-task="deleteTask"
             />

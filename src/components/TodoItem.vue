@@ -1,7 +1,26 @@
+<script setup>
+import { defineProps } from "vue";
+
+const props = defineProps({
+  task: String,
+  index: Number, // Ensure deleteTaskCallback prop is defined
+});
+
+
+
+const emit = defineEmits(["deleteTask"]);
+
+const deleteTaskCallback = () => {
+  emit("deleteTask", props.index);
+};
+</script>
+
 <template>
   <div>
     <h4 class="">{{ taskName }}</h4>
-    <div class="d-flex bg-light justify-content-between align-items-center rounded p-2">
+    <div
+      class="d-flex bg-light justify-content-between align-items-center rounded p-2"
+    >
       <div class="ps-3">
         <input
           class="form-check-input"
@@ -42,8 +61,10 @@
               <a class="dropdown-item" href="#">Edit</a>
             </li>
             <li>
-              <!-- Pass index to the deleteTask function -->
-              <a @click="deleteTask()" class="dropdown-item" href="#">Delete</a>
+              <!-- Call deleteTaskCallback when delete is clicked -->
+              <a @click="deleteTaskCallback" class="dropdown-item" href="#"
+                >Delete</a
+              >
             </li>
           </ul>
         </div>
@@ -51,33 +72,6 @@
     </div>
   </div>
 </template>
-<script setup>
-import { ref, onMounted } from 'vue';
-
-const taskToDelete = ref(null); // Store the task to delete
-const props = defineProps({
-  task: String,
-  taskName: String,
-  index: Number,
-});
-
-// Define a function to set the task to delete
-const setTaskToDelete = () => {
-  taskToDelete.value = props.task; // Store the task to delete
-};
-
-// Define a function to delete the task
-const deleteTask = () => {
-  console.log("Delete task:", props.index); // Log the index of the task to delete
-  // Implement your delete logic here
-  if (taskToDelete.value === props.task) {
-    // Emit an event to notify the parent component about the task to delete
-    emit('delete-task', props.index);
-    taskToDelete.value = null; // Reset the taskToDelete
-  }
-};
-</script>
-
 
 <style scoped>
 .dropdown-toggle::after {
