@@ -1,17 +1,26 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
   task: String,
-  index: Number, // Ensure deleteTaskCallback prop is defined
+  index: Number,
 });
 
-
+const isChecked = ref(false);
+const taskStarted = ref(false);
 
 const emit = defineEmits(["deleteTask"]);
 
 const deleteTaskCallback = () => {
   emit("deleteTask", props.index);
+};
+
+const toggleCheckbox = () => {
+  isChecked.value = !isChecked.value;
+};
+
+const startTask = () => {
+  taskStarted.value = true;
 };
 </script>
 
@@ -19,7 +28,8 @@ const deleteTaskCallback = () => {
   <div>
     <h4 class="">{{ taskName }}</h4>
     <div
-      class="d-flex bg-light justify-content-between align-items-center rounded p-2"
+      class="d-flex bg-light justify-content-between align-items-center rounded p-2 task-area"
+      :style="{ backgroundColor: taskStarted ? '#ffd966 !important' : '' }"
     >
       <div class="ps-3">
         <input
@@ -27,8 +37,13 @@ const deleteTaskCallback = () => {
           type="checkbox"
           value=""
           id="flexCheckDefault"
+          @change="toggleCheckbox"
         />
-        <label class="form-check-label ms-2" for="flexCheckIndeterminate">
+        <label
+          class="form-check-label ms-2"
+          :class="{ 'text-decoration-line-through': isChecked }"
+          for="flexCheckIndeterminate"
+        >
           {{ task }}
         </label>
       </div>
@@ -56,12 +71,13 @@ const deleteTaskCallback = () => {
           </a>
 
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Start</a></li>
+            <li>
+              <a @click="startTask" class="dropdown-item" href="#">Start</a>
+            </li>
             <li>
               <a class="dropdown-item" href="#">Edit</a>
             </li>
             <li>
-              <!-- Call deleteTaskCallback when delete is clicked -->
               <a @click="deleteTaskCallback" class="dropdown-item" href="#"
                 >Delete</a
               >
@@ -87,5 +103,19 @@ const deleteTaskCallback = () => {
 }
 .dropdown-menu .dropdown-item {
   border-radius: 5px;
+}
+.dropdown-item:active{
+  background-color: #fdde81;
+  color: #000;
+}
+
+.form-check-input:checked {
+    background-color: rgb(255, 140, 75);
+    border-color: rgb(255, 140, 75);
+}
+.form-check-input:focus {
+    border-color: rgb(255, 140, 75);
+    outline: 0;
+    box-shadow:none;
 }
 </style>
