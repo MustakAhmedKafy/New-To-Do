@@ -1,29 +1,3 @@
-<script setup>
-import { defineProps, ref } from "vue";
-
-const props = defineProps({
-  task: String,
-  index: Number,
-});
-
-const isChecked = ref(false);
-const taskStarted = ref(false);
-
-const emit = defineEmits(["deleteTask"]);
-
-const deleteTaskCallback = () => {
-  emit("deleteTask", props.index);
-};
-
-const toggleCheckbox = () => {
-  isChecked.value = !isChecked.value;
-};
-
-const startTask = () => {
-  taskStarted.value = true;
-};
-</script>
-
 <template>
   <div>
     <h4 class="">{{ taskName }}</h4>
@@ -31,21 +5,32 @@ const startTask = () => {
       class="d-flex bg-light justify-content-between align-items-center rounded p-2 task-area"
       :style="{ backgroundColor: taskStarted ? '#ffd966 !important' : '' }"
     >
-      <div class="ps-3">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          value=""
-          id="flexCheckDefault"
-          @change="toggleCheckbox"
-        />
-        <label
-          class="form-check-label ms-2"
-          :class="{ 'text-decoration-line-through': isChecked }"
-          for="flexCheckIndeterminate"
-        >
-          {{ task }}
-        </label>
+      <div class="ps-3" @dblclick="editTask">
+        <template v-if="!editing">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            @change="toggleCheckbox"
+          />
+          <label
+            class="form-check-label ms-2"
+            :class="{ 'text-decoration-line-through': isChecked }"
+            for="flexCheckIndeterminate"
+          >
+            {{ task }}
+          </label>
+        </template>
+        <template v-else>
+          <input
+            class="form-control"
+            type="text"
+            v-model="editTaskName"
+            @keyup.enter="saveEdit"
+            @blur="saveEdit"
+          />
+        </template>
       </div>
       <div>
         <div class="dropdown">
@@ -75,12 +60,10 @@ const startTask = () => {
               <a @click="startTask" class="dropdown-item" href="#">Start</a>
             </li>
             <li>
-              <a class="dropdown-item" href="#">Edit</a>
+              <a class="dropdown-item" @click="editTask" href="#">Edit</a>
             </li>
             <li>
-              <a @click="deleteTaskCallback" class="dropdown-item" href="#"
-                >Delete</a
-              >
+              <a @click="deleteTaskCallback" class="dropdown-item" href="#">Delete</a>
             </li>
           </ul>
         </div>
@@ -88,6 +71,49 @@ const startTask = () => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { defineProps, defineEmits, ref } from "vue";
+
+const props = defineProps({
+  task: String,
+  index: Number,
+});
+
+const isChecked = ref(false);
+const taskStarted = ref(false);
+const editing = ref(false);
+const editTaskName = ref(props.task);
+
+const emit = defineEmits(["deleteTask", "updateTask"]);
+
+const deleteTaskCallback = () => {
+  emit("deleteTask", props.index);
+};
+
+const toggleCheckbox = () => {
+  isChecked.value = !isChecked.value;
+};
+
+const startTask = () => {
+  taskStarted.value = true;
+};
+
+const editTask = () => {
+  editing.value = true;
+};
+
+const saveEdit = () => {
+  if (editTaskName.value.trim() !== "") {
+    emit("updateTask", { index: props.index, task: editTaskName.value });
+    editing.value = false;
+  } else {
+    editTaskName.value = props.task; // Revert to original value if empty
+    editing.value = false;
+  }
+};
+</script>
+
 
 <style scoped>
 .dropdown-toggle::after {
