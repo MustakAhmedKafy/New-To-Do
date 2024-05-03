@@ -49,7 +49,7 @@ const updateTask = ({ index, task }) => {
                   data-bs-parent="#accordionExample"
                 >
                   <div class="accordion-body">
-                    <input class="form-control" type="text" v-model="newTask" />
+                    <input class="form-control" type="text" v-model="newTask" @keydown.enter.prevent="addTask" />
                     <button
                       type="button"
                       class="btn btn-warning border-0 mt-2"
