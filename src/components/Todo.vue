@@ -19,6 +19,7 @@ const deleteTask = (index) => {
 const updateTask = ({ index, task }) => {
   tasks.value[index] = task;
 };
+
 </script>
 
 <template>
