@@ -64,8 +64,8 @@ const updateTask = ({ index, task }) => {
             <h3 class="my-3">Task Name</h3>
             <!-- item -->
             <TodoItem
-              v-for="(task, index) in tasks"
-              :key="index"
+              v-for="task in tasks"
+              :key="task"
               :task="task"
               :index="index"
               @delete-task="deleteTask"
