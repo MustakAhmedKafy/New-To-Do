@@ -21,6 +21,43 @@ const updateTask = ({ index, task }) => {
 };
 
 </script>
+<!-- <script setup>
+import { ref, onMounted } from "vue";
+import tasksApi from "../api";
+import TodoItem from "./TodoItem.vue";
+import axios from "axios";
+
+const tasks = ref([]);
+const newTask = ref("");
+
+const fetchTasks = async () => {
+  try {
+    const response = await axios.get("F:/Ongoing project/New-To-Dosrc/tasks.json");
+    tasks.value = response.data;
+    console.log("lorem", response);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+  }
+};
+
+onMounted(() => {
+  fetchTasks();
+});
+
+const addTask = () => {
+  if (newTask.value.trim() !== "") {
+    tasks.value.push(newTask.value);
+    newTask.value = "";
+  }
+};
+
+const deleteTask = (index) => {
+  tasks.value.splice(index, 1);
+};
+const updateTask = ({ index, task }) => {
+  tasks.value[index] = task;
+};
+</script> -->
 
 <template>
   <div>
@@ -50,7 +87,12 @@ const updateTask = ({ index, task }) => {
                   data-bs-parent="#accordionExample"
                 >
                   <div class="accordion-body">
-                    <input class="form-control" type="text" v-model="newTask" @keydown.enter.prevent="addTask" />
+                    <input
+                      class="form-control"
+                      type="text"
+                      v-model="newTask"
+                      @keydown.enter.prevent="addTask"
+                    />
                     <button
                       type="button"
                       class="btn btn-warning border-0 mt-2"
