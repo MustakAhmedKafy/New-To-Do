@@ -1,27 +1,39 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { data, fn } from "../data.js";
 import TodoItem from "./TodoItem.vue";
 
-const tasks = ref(["Task 1", "Task 2", "Task 3", "Task 4"]);
-const newTask = ref("");
+// const tasks = ref(["Task 1", "Task 2", "Task 3", "Task 4"]);
+// const newTask = ref("");
 
-const addTask = () => {
-  if (newTask.value.trim() !== "") {
-    tasks.value.push(newTask.value);
-    newTask.value = "";
-  }
+// const addTask = () => {
+//   if (newTask.value.trim() !== "") {
+//     tasks.value.push(newTask.value);
+//     newTask.value = "";
+//   }
+// };
+
+// const deleteTask = (index) => {
+//   // Implement delete logic here
+//   tasks.value.splice(index, 1);
+// };
+// const updateTask = ({ index, task }) => {
+//   tasks.value[index] = task;
+// };
+
+// api
+
+const getPosts = async () => {
+  const res = await fn.fetchPublicApi("/todos", "get");
+ 
+  data.todo = res;
 };
 
-const deleteTask = (index) => {
-  // Implement delete logic here
-  tasks.value.splice(index, 1);
-};
-const updateTask = ({ index, task }) => {
-  tasks.value[index] = task;
-};
-
+onMounted(async () => {
+  await getPosts();
+  console.log(data.todo);
+});
 </script>
-
 
 <template>
   <div>
@@ -71,9 +83,9 @@ const updateTask = ({ index, task }) => {
             <h3 class="my-3">Task Name</h3>
             <!-- item -->
             <TodoItem
-              v-for="task in tasks"
+              v-for="task in data.todo"
               :key="task"
-              :task="task"
+              :task="task.title"
               :index="index"
               @delete-task="deleteTask"
               @update-task="updateTask"
