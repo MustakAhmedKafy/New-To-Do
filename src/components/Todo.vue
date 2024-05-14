@@ -11,7 +11,7 @@ const addTask = () => {
     newTask.value = "";
   }
 };
-
+// delete task
 const deleteTask = (index) => {
   // Implement delete logic here
   tasks.value.splice(index, 1);
@@ -19,9 +19,7 @@ const deleteTask = (index) => {
 const updateTask = ({ index, task }) => {
   tasks.value[index] = task;
 };
-
 </script>
-
 
 <template>
   <div>
